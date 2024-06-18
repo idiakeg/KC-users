@@ -170,7 +170,10 @@ function App() {
                             </div>
                             {allUsers.map((item, index) => {
                                 return (
-                                    <div className="table_head" key={index}>
+                                    <div
+                                        className="table_head a_item"
+                                        key={index}
+                                    >
                                         <span className="sn">{index + 1}</span>
                                         <span>{item.username}</span>
                                         <span className="sn">{item.age}</span>

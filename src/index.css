@@ -25,7 +25,6 @@ body {
 
 /* ---------- user container -------- */
 .user_container {
-    /* border: 1px dashed green; */
     width: 250px;
     margin-inline: auto;
 }
@@ -79,9 +78,6 @@ form button:disabled {
 }
 
 /* -------- user list container ------- */
-.user_list_container {
-    /* border: 2px dashed blue; */
-}
 
 .user_list_container p {
     margin: 0;
@@ -95,15 +91,19 @@ form button:disabled {
 }
 
 .table_head {
-    /* border: 1px solid red; */
     display: grid;
     grid-template-columns: 5% 41% 8% 37%;
     gap: 3%;
-    /* text-align: center; */
 }
 
 .table_head:not(:last-child) {
     margin-bottom: 0.8rem;
+    /* border-bottom: 1px solid red; */
+}
+
+.a_item {
+    border-bottom: 1px solid powderblue;
+    padding-bottom: 0.5rem;
 }
 
 .table_head.first {
@@ -112,10 +112,10 @@ form button:disabled {
 
 .goo {
     display: flex;
+    gap: 0.5rem;
 }
 
 .tools {
-    /* border: 1px solid green; */
     display: flex;
     gap: 1rem;
     margin-left: auto;
@@ -140,5 +140,20 @@ i:hover {
 @media screen and (max-width: 900px) {
     .wrapper {
         width: 80%;
+    }
+}
+
+@media screen and (max-width: 500px) {
+    .wrapper {
+        width: 90%;
+    }
+
+    .user_container {
+        width: 220px;
+    }
+
+    .table_head {
+        font-size: 0.875rem;
+        grid-template-columns: 8% 38% 8% 37%;
     }
 }
