@@ -14,6 +14,7 @@ function App() {
     const [editIndex, setEditIndex] = useState(-1);
 
     const [editFlag, setEditFlag] = useState(false);
+    const [btnDisabled, setBtnDisabled] = useState(false);
 
     let indexToBeEdited = -1;
 
@@ -148,7 +149,7 @@ function App() {
                                 </div>
                                 <button
                                     type="submit"
-                                    disabled={!(dirty && isValid)}
+                                    disabled={!(dirty && isValid) && !editFlag} //if the form has been touched and there are no errors and the edit btn has not been clicked, the button is enabled. if the form has not been touched and the edit button has been clicked, the button should be enabled.
                                 >
                                     {editFlag ? "edit user" : "add user"}
                                 </button>
