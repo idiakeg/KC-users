@@ -145,6 +145,7 @@ function App() {
                                 </div>
                                 <div className="form_group">
                                     <input
+                                        className="age"
                                         type="number"
                                         name="age"
                                         value={values.age}

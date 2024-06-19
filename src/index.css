@@ -137,6 +137,14 @@ i:hover {
     text-align: center;
 }
 
+.age {
+    pointer-events: none;
+}
+
+.age:focus {
+    outline: none;
+}
+
 @media screen and (max-width: 900px) {
     .wrapper {
         width: 80%;
