@@ -18,18 +18,17 @@ function App() {
 
     let indexToBeEdited = -1;
 
-    // let initial_values = {
-    //     username: "",
-    //     dob: "",
-    //     age: "",
-    // };
-
     const validation_schema = Yup.object().shape({
         username: Yup.string().required("Name is required."),
-        dob: Yup.string().required("DOB is required"),
-        age: Yup.number()
-            .required("Number is required")
-            .min(18, "Must be at least 18 years old."),
+        dob: Yup.date()
+            .required("Date of Birth is required")
+            .max(new Date(), "Date of Birth cannot be in the future") // Optionally limit to past dates
+            .test("is-old-enough", "Must be 18 or older", function (value) {
+                const today = new Date();
+                const birthDate = new Date(value);
+                const age = today.getFullYear() - birthDate.getFullYear();
+                return age >= 18;
+            }),
     });
 
     const handleSubmit = (values, { resetForm }) => {
@@ -45,36 +44,23 @@ function App() {
         }
 
         if (editFlag) {
-            console.log(editIndex);
             allUsers.splice(editIndex, 1, values);
             localStorage.setItem("kc_users", JSON.stringify(allUsers));
             setEditFlag(false);
             setInitial_values({ username: "", dob: "", age: "" });
         }
 
-        // setUser({ username: "", dob: "", age: "" });
         resetForm();
     };
 
-    // const handleChange = (e) => {
-    //     const { name, value } = e.target;
-    //     setUser((prev) => ({
-    //         ...prev,
-    //         [name]: value,
-    //     }));
-    // };
-
     const handleEdit = (id) => {
         console.log("edit option");
-        // change the edit flag to true
         setEditFlag(true);
-        // obtain the object
         let userToBeEdited = allUsers.find((_, index) => {
             indexToBeEdited++;
             return index === id;
         });
 
-        // console.log(indexToBeEdited);
         setEditIndex(indexToBeEdited);
 
         setInitial_values(userToBeEdited);
@@ -84,6 +70,22 @@ function App() {
         const newUsers = allUsers.filter((_, index) => id !== index);
         setAllUsers(newUsers);
         localStorage.setItem("kc_users", JSON.stringify(newUsers));
+    };
+
+    const calculateAge = (dob) => {
+        const today = new Date();
+        const birthDate = new Date(dob);
+        let age = today.getFullYear() - birthDate.getFullYear();
+        const monthDiff = today.getMonth() - birthDate.getMonth();
+
+        if (
+            monthDiff < 0 ||
+            (monthDiff === 0 && today.getDate() < birthDate.getDate())
+        ) {
+            age--;
+        }
+
+        return age.toString(); // Return age as string
     };
 
     return (
@@ -99,6 +101,7 @@ function App() {
                     >
                         {({
                             values,
+                            setFieldValue,
                             errors,
                             touched,
                             handleChange,
@@ -127,7 +130,13 @@ function App() {
                                         name="dob"
                                         placeholder="Enter your DOB"
                                         value={values.dob}
-                                        onChange={handleChange}
+                                        onChange={(e) => {
+                                            handleChange(e);
+                                            const age = calculateAge(
+                                                e.target.value
+                                            );
+                                            setFieldValue("age", age);
+                                        }}
                                         onBlur={handleBlur}
                                     />
                                     {errors.dob && touched.dob && (
@@ -138,18 +147,16 @@ function App() {
                                     <input
                                         type="number"
                                         name="age"
-                                        placeholder="Enter your age"
                                         value={values.age}
-                                        onChange={handleChange}
-                                        onBlur={handleBlur}
+                                        readOnly
                                     />
-                                    {errors.age && touched.age && (
+                                    {/* {errors.age && touched.age && (
                                         <span>{errors.age}</span>
-                                    )}
+                                    )} */}
                                 </div>
                                 <button
                                     type="submit"
-                                    disabled={!(dirty && isValid) && !editFlag} //if the form has been touched and there are no errors and the edit btn has not been clicked, the button is enabled. if the form has not been touched and the edit button has been clicked, the button should be enabled.
+                                    disabled={!(dirty && isValid) && !editFlag}
                                 >
                                     {editFlag ? "edit user" : "add user"}
                                 </button>
