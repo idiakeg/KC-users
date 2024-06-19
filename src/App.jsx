@@ -130,6 +130,11 @@ function App() {
                                         name="dob"
                                         placeholder="Enter your DOB"
                                         value={values.dob}
+                                        max={
+                                            new Date()
+                                                .toISOString()
+                                                .split("T")[0]
+                                        }
                                         onChange={(e) => {
                                             handleChange(e);
                                             const age = calculateAge(
